@@ -3,12 +3,12 @@
 function setup() {
     game = new Game();
 	createCanvas(game.canvas.width, game.canvas.height);
-	loadImage("assets/burried.png", function(img){
+	loadImage("assets/burried_modified.png", function(img){
         game.backgroundImage = img;
     });
 
 	// add the client player
-    game.players['client'] = new Player(80, 80, 20, 5, 200, game);
+    game.players['client'] = new Player(game.canvas.width / 2, game.canvas.height / 2, 20, 5, 200, game);
 
     // build an enemy robot
     let robot = new Robot(160, 160, 20, 5, 100, game);
@@ -20,7 +20,19 @@ function draw() {
     background(game.backgroundColor); // to clear the canvas
 
     if (game.backgroundImage) {
-        image(game.backgroundImage, 0, 0, game.width, game.height);
+        let follow = game.players['client'];
+        console.log(follow);
+        image(game.backgroundImage,
+            0,            // destination x
+            0,           // destination y
+            game.canvas.width,   // destination width
+            game.canvas.height,  // destination height
+            follow.x - (game.canvas.width / 2),           // source x
+            follow.y - (game.canvas.height / 2),           // source y
+            game.canvas.width,                     // source width
+            game.canvas.height                     // source height
+        );
+        //image(game.backgroundImage, 0, 0, game.width, game.height);
     }
 
     // move through players
