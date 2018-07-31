@@ -1,28 +1,39 @@
-﻿let game;
-let camera;
+let game;
 
 function setup() {
     game = new Game();
-
-	createCanvas(game.canvas.width, game.canvas.height);
-	loadImage("../assets/burried_modified.png", function(img){
+    createCanvas(game.canvas.width, game.canvas.height);
+    loadImage("../assets/burried_modified.png", function(img){
         game.backgroundImage = img;
     });
 
-	// add the client player
-    game.players['client'] = new Player(game.origin.x, game.origin.y, 20, 5, 200, game);
+    // add the client player
+    game.players['client'] = new Player(game.canvas.width / 2, game.canvas.height / 2, 20, 5, 200, game);
 
     // build an enemy robot
     let robot = new Robot(160, 160, 20, 5, 100, game);
     game.baddies.push(robot);
 
-    camera = new Camera();
-    camera.follow = robot;
 }
 
 function draw() {
     background(game.backgroundColor); // to clear the canvas
-    camera.capture();
+
+    if (game.backgroundImage) {
+        let follow = game.players['client'];
+        console.log(follow);
+        image(game.backgroundImage,
+            0,            // destination x
+            0,           // destination y
+            game.canvas.width,   // destination width
+            game.canvas.height,  // destination height
+            follow.x - (game.canvas.width / 2),           // source x
+            follow.y - (game.canvas.height / 2),           // source y
+            game.canvas.width,                     // source width
+            game.canvas.height                     // source height
+        );
+        //image(game.backgroundImage, 0, 0, game.width, game.height);
+    }
 
     // move through players
     for (p in game.players){
@@ -58,7 +69,7 @@ function keyPressed(){
 
 function keyReleased(){
 
-	let client = game.players['client'];
+    let client = game.players['client'];
 
     // stop player motion
     if (keyCode === LEFT_ARROW){
@@ -71,14 +82,4 @@ function keyReleased(){
         client.dy = 0;
     }
 
-}
-
-function keyTyped() {
-    if (key === 'f') {
-        if (camera.follow === game.baddies[0]){
-            camera.follow = game.players['client'];
-        } else {
-            camera.follow = game.baddies[0];
-        }
-    }
 }

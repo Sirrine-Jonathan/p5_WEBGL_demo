@@ -64,7 +64,7 @@ Camera.prototype.updatePos = function(){
 };
 
 function setup() {
-	bg = loadImage("assets/burried.png");
+	bg = loadImage("../assets/burried.png");
 	createCanvas(windowWidth, windowHeight, WEBGL);
 	//createCanvas(512, 288, WEBGL);
 	let firstPlayer = new Player(80, 80, 20, 5, 200);

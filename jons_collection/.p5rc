@@ -2,6 +2,7 @@
   "name": "jons_collection",
   "projects": [
     "WEBGL",
-    "CANVAS"
+    "CANVAS",
+    "maze"
   ]
 }
