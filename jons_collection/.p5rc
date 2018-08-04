@@ -3,6 +3,7 @@
   "projects": [
     "WEBGL",
     "CANVAS",
-    "maze"
+    "maze",
+    "randomized_maze"
   ]
 }
