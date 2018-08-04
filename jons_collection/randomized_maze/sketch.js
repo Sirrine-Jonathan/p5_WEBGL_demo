@@ -10,7 +10,7 @@ function setup() {
     createCanvas(400, 400);
     cols = floor(width/w);
     rows = floor(height/w);
-    // frameRate(5);
+    frameRate(5);
 
 
     for (var j = 0; j < rows; j++) {
@@ -21,9 +21,6 @@ function setup() {
     }
 
     current = grid[0];
-
-
-
 }
 
 function draw() {

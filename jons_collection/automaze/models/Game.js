@@ -16,14 +16,27 @@ class Game{
         };
         this.camera = new Camera(this);
         this.maze = new Maze(this);
-        this.pathSize; // set inside maze constructor;
+        this.cellWidth;
+        this.cellHeight;
     }
 
     addPlayer(player, id) {
-        player.size = this.pathSize / 2;
-        player.speed = this.pathSize + 2;
+        let pathSize = (this.cellWidth > this.cellHeight) ? this.cellWidth:this.cellHeight;
+        player.size = pathSize / 2;
+        player.speedX = this.cellWidth;
+        player.speedY = this.cellHeight;
         player.x = player.size;
         player.y = player.size;
         this.players[id] = player;
+    }
+
+    addRobot(robot){
+        let pathSize = (this.cellWidth > this.cellHeight) ? this.cellWidth:this.cellHeight;
+        robot.size = pathSize / 2;
+        robot.speedX = this.cellWidth;
+        robot.speedY = this.cellHeight;
+        robot.x = robot.size;
+        robot.y = robot.size;
+        this.baddies.push(robot);
     }
 }

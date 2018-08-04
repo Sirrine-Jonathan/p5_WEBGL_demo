@@ -4,6 +4,7 @@
     "WEBGL",
     "CANVAS",
     "maze",
-    "randomized_maze"
+    "randomized_maze",
+    "automaze"
   ]
 }

@@ -18,14 +18,6 @@ Player.prototype.updatePos = function(){
 Player.prototype.draw = function(){
 	stroke(0);
 	fill(this.color);
-	/*
-    beginShape();
-    vertex(this.x - this.size, this.y - this.size);
-    vertex(this.x + this.size, this.y - this.size);
-    vertex(this.x + this.size, this.y + this.size);
-    vertex(this.x - this.size, this.y + this.size);
-    endShape(CLOSE);
-    */
 	translate(this.x, this.y, 0);
 	box(this.size, this.size, this.size);
 	translate(-this.x, -this.y, 0);
@@ -51,6 +43,9 @@ function Camera(x, y, z, centerX, centerY, centerZ, upX, upY, upZ){
 	this.centerDX = 0;
 	this.centerDY = 0;
 	this.centerDZ = 0;
+	this.upDX = 0;
+	this.upDY = 0;
+	this.upDZ = 0;
 }
 Camera.prototype.updatePos = function(){
 	this.x += this.dx;
@@ -59,6 +54,9 @@ Camera.prototype.updatePos = function(){
 	this.centerX += this.centerDX;
 	this.centerY += this.centerDY;
 	this.centerZ += this.centerDZ;
+	this.upX += this.upDX;
+	this.upY += this.upDY;
+	this.upZ += this.upDZ;
 	let display = document.querySelector("#display");
 	display.innerHTMl = JSON.stringify(this);
 };
@@ -120,11 +118,11 @@ function keyPressed(){
     } else if (keyCode === 89){     // y
 		CAM.centerDZ = i;
     } else if (keyCode === 85){     // u
-
+		CAM.upDX = i;
     } else if (keyCode === 73){     // i
-
+		CAM.upDY = i;
     } else if (keyCode === 79){     // o
-
+		CAM.upDZ = i;
     }
 
     // decrease camera values
@@ -148,13 +146,13 @@ function keyPressed(){
 		CAM.centerDZ = -i;
     } else if (keyCode === 74){
         // j
-
+		CAM.upDX = -i;
     } else if (keyCode === 75){
         // k
-
+   		CAM.upDY = -1;
     } else if (keyCode === 76){
         // l
-
+		CAM.upDZ = -1;
     }
 
 
@@ -194,13 +192,13 @@ function keyReleased(){
 		CAM.centerDZ = 0;
     } else if (keyCode === 85){
         // u
-
+		CAM.upDX = 0;
     } else if (keyCode === 73){
         // i
-
+		CAM.upDY = 0;
     } else if (keyCode === 79){
         // o
-
+		CAM.upDZ = 0;
     }
 
     // decrease camera values
@@ -224,12 +222,12 @@ function keyReleased(){
 		CAM.centerDZ = 0;
     } else if (keyCode === 74){
         // j
-
+		CAM.upDX = 0;
     } else if (keyCode === 75){
         // k
-
+		CAM.upDY = 0;
     } else if (keyCode === 76){
         // l
-
+		CAM.upDZ = 0;
     }
 }
