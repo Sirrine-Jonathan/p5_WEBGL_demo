@@ -9,14 +9,16 @@ function setup() {
     });
 
 	// add the client player
-    let newPlayer = new Player(game.origin.x, game.origin.y, 5, 200, game);
+    let playerColor = "#4271f4";
+    let newPlayer = new Player(0, 0, 5, playerColor, game);
     game.addPlayer(newPlayer, "client");
 
     // build an enemy robot
-    let robot = new Robot(160, 160, 20, 5, 100, game);
+    let color = "#f44141";
+    let robot = new Robot(160, 160, 20, 5, color, game);
     game.addRobot(robot);
-    game.camera.follow = newPlayer;
-    frameRate(15);
+    game.camera.follow = robot;
+    frameRate(25);
 
 }
 
@@ -44,16 +46,18 @@ function keyPressed(){
 
     // move player about
     let client = game.players['client'];
-    let sx = client.speedX;
-    let sy = client.speedY;
-    if (keyCode === LEFT_ARROW){
-        client.dx = -sx;
-    } else if (keyCode === RIGHT_ARROW){
-        client.dx = sx;
-    } else if (keyCode === UP_ARROW){
-        client.dy = -sy;
-    } else if (keyCode === DOWN_ARROW){
-        client.dy = sy;
+    if (keyCode === LEFT_ARROW || keyCode === RIGHT_ARROW) {
+        if (keyCode === LEFT_ARROW) {
+            client.dx = -1;
+        } else if (keyCode === RIGHT_ARROW) {
+            client.dx = 1;
+        }
+    } else {
+        if (keyCode === UP_ARROW){
+            client.dy = -1;
+        } else if (keyCode === DOWN_ARROW) {
+            client.dy = 1;
+        }
     }
 
 }

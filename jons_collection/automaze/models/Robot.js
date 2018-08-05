@@ -12,17 +12,7 @@ function Robot(x, y, size, speed, color, game){
     this.speedY;
 }
 Robot.prototype.updatePos = function(){
-    this.x += this.dx;
-    this.y += this.dy;
-    let buf = this.size / 2;
-    if ((this.x + buf) > this.game.width ||
-        (this.x - buf) < 0) {
-        this.dx = -this.dx;
-    }
-    if ((this.y + buf) > this.game.height ||
-        (this.y - buf) < 0){
-        this.dy = -this.dy;
-    }
+
 };
 
 Robot.prototype.draw = function(){

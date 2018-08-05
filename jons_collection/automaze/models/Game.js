@@ -6,6 +6,7 @@ class Game{
             width: 924,
             height: 476
         };
+        this.mazeComplexity = 12;
         this.backgroundColor = "#000000";
         this.backgroundImage = null;
         this.players = {};
@@ -23,10 +24,8 @@ class Game{
     addPlayer(player, id) {
         let pathSize = (this.cellWidth > this.cellHeight) ? this.cellWidth:this.cellHeight;
         player.size = pathSize / 2;
-        player.speedX = this.cellWidth;
-        player.speedY = this.cellHeight;
-        player.x = player.size;
-        player.y = player.size;
+        player.x = 0;
+        player.y = 0;
         this.players[id] = player;
     }
 
@@ -35,8 +34,8 @@ class Game{
         robot.size = pathSize / 2;
         robot.speedX = this.cellWidth;
         robot.speedY = this.cellHeight;
-        robot.x = robot.size;
-        robot.y = robot.size;
+        robot.x = this.width - robot.size;
+        robot.y = this.height - robot.size;
         this.baddies.push(robot);
     }
 }

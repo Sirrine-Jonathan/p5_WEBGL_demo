@@ -58,6 +58,10 @@ class Cell {
         this.tr = tr;
         this.br = br;
         this.bl = bl;
+        this.middle = {
+            'x': tl.x + ((tr.x - tl.x) / 2),
+            'y': tl.y + ((bl.y - tl.y) / 2)
+        };
         this.visited = false;
         this.walls = [true, true, true, true];
     }
@@ -69,7 +73,7 @@ class Maze {
     {
 
         // find number of vertices based on game size;
-        let optimal = 40;
+        let optimal = game.mazeComplexity;
         let horzCells;
         let vertCells;
         if (game.width < game.height){
