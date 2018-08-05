@@ -17,7 +17,7 @@ function setup() {
     let color = "#f44141";
     let robot = new Robot(160, 160, 20, 5, color, game);
     game.addRobot(robot);
-    game.camera.follow = robot;
+    game.camera.follow = newPlayer;
     frameRate(25);
 
 }
@@ -49,14 +49,18 @@ function keyPressed(){
     if (keyCode === LEFT_ARROW || keyCode === RIGHT_ARROW) {
         if (keyCode === LEFT_ARROW) {
             client.dx = -1;
+            client.direction = 4;
         } else if (keyCode === RIGHT_ARROW) {
             client.dx = 1;
+            client.direction = 2;
         }
     } else {
         if (keyCode === UP_ARROW){
             client.dy = -1;
+            client.direction = 1;
         } else if (keyCode === DOWN_ARROW) {
             client.dy = 1;
+            client.direction = 3;
         }
     }
 
@@ -79,12 +83,16 @@ function keyReleased(){
 
 }
 
+let fToggle = 0;
 function keyTyped() {
     if (key === 'f') {
-        if (game.camera.follow === game.baddies[0]){
+        fToggle = (fToggle + 1) % 3;
+        if (fToggle === 0){
             game.camera.follow = game.players['client'];
-        } else {
+        } else if (fToggle === 1){
             game.camera.follow = game.baddies[0];
+        } else {
+            game.camera.follow = game.origin;
         }
     }
 }

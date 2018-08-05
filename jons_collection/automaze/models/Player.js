@@ -6,6 +6,7 @@ function Player(x, y, speed, color, game){
     this.color = color;
     this.game = game;
     this.speed = 1;
+    this.direction = 0;
     this.x;
     this.y;
 
@@ -17,12 +18,35 @@ Player.prototype.updatePos = function(){
     let simX = this.cellX + this.dx;
     let simY = this.cellY + this.dy;
     let grid = this.game.maze.cells;
-    if (grid[simX] && grid[simX][simY]){
-        this.cellX += this.dx;
-        this.cellY += this.dy;
+    if (!grid[simX] || !grid[simX][simY])
+        return;
+
+    let wallInd;
+    if (this.dx != 0){
+        if (this.dx === 1){
+            wallInd = 1;
+        } else {
+            wallInd = 3;
+        }
+
+    } else if (this.dy != 0) {
+        if (this.dy === 1) {
+            wallInd = 2;
+        } else {
+            wallInd = 0;
+        }
+    } else {
+        return;
     }
-    /*
+
+    if (grid[this.cellX][this.cellY].walls[wallInd])
+        return;
+
+    this.cellX += this.dx;
+    this.cellY += this.dy;
+
     // check against maze lines
+    /*
     let vertCount = 0;
     let horzCount = 0;
     let vertices = game.maze.graph.AdjList.keys();
@@ -36,6 +60,8 @@ Player.prototype.updatePos = function(){
             }
         }
     }
+
+
 
         let str;
         stroke(0);
@@ -64,7 +90,7 @@ Player.prototype.draw = function(){
     let equationY = this.y + game.camera.view.y;
     ellipse(equationX, equationY, this.size, this.size);
 
-
+    /*
         fill(255);
         let str;
         str = "view_x: " + game.camera.view.x;
@@ -79,5 +105,6 @@ Player.prototype.draw = function(){
         text(str, 0, 50);
         str = "actual_y: " + equationY;
         text(str, 0, 60);
+    */
 };
 

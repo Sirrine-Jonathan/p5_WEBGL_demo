@@ -6,7 +6,7 @@ class Game{
             width: 924,
             height: 476
         };
-        this.mazeComplexity = 12;
+        this.mazeComplexity = 24;
         this.backgroundColor = "#000000";
         this.backgroundImage = null;
         this.players = {};
