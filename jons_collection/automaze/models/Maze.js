@@ -65,6 +65,19 @@ class Cell {
         this.visited = false;
         this.walls = [true, true, true, true];
     }
+
+    static copy(cell){
+        let newCell = new Cell(
+            cell.tl,
+            cell.tr,
+            cell.br,
+            cell.bl,
+            cell.row,
+            cell.col
+        );
+        newCell.walls = cell.walls.slice();
+        return newCell;
+    }
 }
 
 class Maze {
@@ -116,7 +129,7 @@ class Maze {
         let current = this.cells[0][0];
         current.visited = true;
         while (current != null) {
-            var next = this.checkNeighbors(current);
+            var next = this.checkNeighbors(current, this.cells);
             if (next) {
                 next.visited = true;
                 // STEP 2
@@ -207,7 +220,7 @@ class Maze {
 
     }
 
-    checkNeighbors(cell){
+    checkNeighbors(cell, cells){
         let neighbors = [];
         let i = cell.row;
         let j = cell.col;
@@ -216,14 +229,14 @@ class Maze {
         let right;
         let bottom;
         let left;
-        if (this.cells[i] && this.cells[i][j - 1])
-            top = this.cells[i][j - 1];
-        if (this.cells[i + 1] && this.cells[i + 1][j])
-            right = this.cells[i + 1][j];
-        if (this.cells[i] && this.cells[i][j + 1])
-            bottom = this.cells[i][j + 1];
-        if (this.cells[i - 1] && this.cells[i - 1][j])
-            left = this.cells[i - 1][j];
+        if (cells[i] && cells[i][j - 1])
+            top = cells[i][j - 1];
+        if (cells[i + 1] && cells[i + 1][j])
+            right = cells[i + 1][j];
+        if (cells[i] && cells[i][j + 1])
+            bottom = cells[i][j + 1];
+        if (cells[i - 1] && cells[i - 1][j])
+            left = cells[i - 1][j];
 
         if(top && !top.visited) {
             neighbors.push(top);

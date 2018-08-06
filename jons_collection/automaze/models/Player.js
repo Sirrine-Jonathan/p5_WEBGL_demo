@@ -1,6 +1,10 @@
 function Player(x, y, speed, color, game){
     this.cellX = x;
     this.cellY = y;
+    this.startCell = {
+      'x': x,
+      'y': y
+    };
     this.dx = 0;
     this.dy = 0;
     this.color = color;
@@ -106,5 +110,10 @@ Player.prototype.draw = function(){
         str = "actual_y: " + equationY;
         text(str, 0, 60);
     */
+};
+
+Player.prototype.return = function(){
+    this.cellX = this.startCell.x;
+    this.cellY = this.startCell.y;
 };
 

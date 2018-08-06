@@ -19,6 +19,7 @@ class Game{
         this.maze = new Maze(this);
         this.cellWidth;
         this.cellHeight;
+        this.time = 0;
     }
 
     addPlayer(player, id) {
@@ -32,8 +33,6 @@ class Game{
     addRobot(robot){
         let pathSize = (this.cellWidth > this.cellHeight) ? this.cellWidth:this.cellHeight;
         robot.size = pathSize / 2;
-        robot.speedX = this.cellWidth;
-        robot.speedY = this.cellHeight;
         robot.x = this.width - robot.size;
         robot.y = this.height - robot.size;
         this.baddies.push(robot);
