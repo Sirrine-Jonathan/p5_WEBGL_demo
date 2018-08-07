@@ -4,12 +4,19 @@ class Camera{
         this.view = {
             x: game.origin.x - this.follow.x,
             y: game.origin.y - this.follow.y
-        }
+        };
+        this.pan = {
+            x: 0,
+            y: 0,
+            dx: 0,
+            dy: 0,
+        };
     }
 }
 
 Camera.prototype.capture = function(){
 
+    this.panUpdate();
     this.setView();
 
     if (game.backgroundImage) {
@@ -21,8 +28,8 @@ Camera.prototype.capture = function(){
             game.canvas.height,
 
             // source x, y, w, h
-            this.follow.x - game.origin.x,
-            this.follow.y - game.origin.y,
+            this.view.x,
+            this.view.y,
             game.canvas.width,
             game.canvas.height
         );
@@ -32,6 +39,16 @@ Camera.prototype.capture = function(){
 };
 
 Camera.prototype.setView = function(){
-    this.view.x = game.origin.x - this.follow.x;
-    this.view.y = game.origin.y - this.follow.y;
+    this.view.x = this.follow.x - (game.origin.x + this.pan.x);
+    this.view.y = this.follow.y - (game.origin.y + this.pan.y);
+};
+
+Camera.prototype.panUpdate = function(){
+    this.pan.x += this.pan.dx;
+    this.pan.y += this.pan.dy;
+};
+
+Camera.prototype.resetPan = function(){
+    this.pan.x = 0;
+    this.pan.y = 0;
 };

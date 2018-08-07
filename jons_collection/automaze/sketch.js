@@ -17,20 +17,27 @@ function setup() {
     let color = "#f44141";
     let row = game.maze.cells.length - 1;
     let col = game.maze.cells[0].length - 1;
+    game.exit = {
+        'cellX': row,
+        'cellY': col
+    };
     let robot = new Robot(row, col, 20, 5, color, game);
     let robotTwo = new Robot(row, col, 20, 5, color, game);
-    game.addRobot(robotTwo);
+    //game.addRobot(robotTwo);
     game.addRobot(robot);
 
-    // set up keys to get
+    // set up coins to get
+    let coin1 = new Coin(game.maze.cells.length - 1, 0, game);
+    let coin2 = new Coin(0, game.maze.cells[0].length - 1, game);
+    game.addCoin(coin1);
+    game.addCoin(coin2);
 
     game.camera.follow = game.origin;
-    frameRate(10);
+    frameRate(20);
 
 }
 
 function draw() {
-    game.time++;
     background(game.backgroundColor); // to clear the canvas
     game.camera.capture();
     game.maze.draw();
@@ -39,14 +46,29 @@ function draw() {
     for (p in game.players){
         game.players[p].updatePos();
         game.players[p].draw();
+        for (let c = 0; c < game.coins.length; c++){
+            if (isSameCell(game.coins[c], game.players[p])){
+                game.coins.splice(c, 1);
+                break;
+            }
+        };
+
+        if (isSameCell(game.exit, game.players[p]) &&
+            game.coins.length == 0){
+            game.reset();
+        }
     }
+
+    game.coins.forEach((each) => {
+        each.draw();
+    });
 
     // move through baddies
     game.baddies.forEach((each) => {
         each.updatePos();
         each.draw();
         for (p in game.players){
-            if (isSameCell(each, game.players[p])){
+            if (isSameCell(each, game.players[p]) && !game.win){
                 game.players[p].return();
             }
         }
@@ -54,13 +76,19 @@ function draw() {
 
     stroke(0);
     fill(255);
-    let time = new Date(game.time).getTime();
-    str = "Time: " + time;
-    text(str, 0, 10);
+    if (!game.win)
+        game.time++;
+    else {
+        game.displayWin();
+    }
+
+    game.maze.cells[game.exit.cellX][game.exit.cellY].drawBorder();
+    //displayTime();
+
 }
 
-function isSameCell(baddie, player){
-    if (baddie.cellX == player.cellX && baddie.cellY === player.cellY)
+function isSameCell(obj1, obj2){
+    if (obj1.cellX == obj2.cellX && obj1.cellY === obj2.cellY)
         return true;
     else
         return false;
@@ -93,6 +121,18 @@ function keyPressed(){
         }
     }
 
+    // move camera about
+    let cs = 10;
+    if (keyCode === 65){         //a
+        game.camera.pan.dx = cs;
+    } else if (keyCode === 68){  //d
+        game.camera.pan.dx = -cs
+    } else if (keyCode === 87){  //w
+        game.camera.pan.dy = cs;
+    } else if (keyCode === 83){  //s
+        game.camera.pan.dy = -cs;
+    }
+
 }
 
 function keyReleased(){
@@ -110,6 +150,15 @@ function keyReleased(){
         client.dy = 0;
     }
 
+    if (keyCode === 65){         //a
+        game.camera.pan.dx = 0;
+    } else if (keyCode === 68){  //d
+        game.camera.pan.dx = 0
+    } else if (keyCode === 87){  //w
+        game.camera.pan.dy = 0;
+    } else if (keyCode === 83){  //s
+        game.camera.pan.dy = 0;
+    }
 }
 
 let fToggle = 0;
@@ -123,5 +172,6 @@ function keyTyped() {
         } else {
             game.camera.follow = game.origin;
         }
+        game.camera.resetPan();
     }
 }

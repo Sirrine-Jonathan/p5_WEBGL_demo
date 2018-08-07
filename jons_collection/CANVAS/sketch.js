@@ -1,5 +1,5 @@
-﻿let game;
-let camera;
+﻿let game = {};
+let camera = {};
 
 function setup() {
     game = new Game();
@@ -16,8 +16,8 @@ function setup() {
     let robot = new Robot(160, 160, 20, 5, 100, game);
     game.baddies.push(robot);
 
-    camera = new Camera();
-    camera.follow = robot;
+    camera = new Game.Camera();
+    camera.follow = game.players['client'];
 }
 
 function draw() {
@@ -54,6 +54,17 @@ function keyPressed(){
         client.dy = s;
     }
 
+    // move camera about
+    let cs = s;
+    if (keyCode === 65){         //a
+        camera.pan.dx = cs;
+    } else if (keyCode === 68){  //d
+        camera.pan.dx = -cs
+    } else if (keyCode === 87){  //w
+        camera.pan.dy = cs;
+    } else if (keyCode === 83){  //s
+        camera.pan.dy = -cs;
+    }
 }
 
 function keyReleased(){
@@ -71,14 +82,29 @@ function keyReleased(){
         client.dy = 0;
     }
 
-}
+    let cs = camera.pan.speed;
+    if (keyCode === 65){         //a
+        camera.pan.dx = 0;
+    } else if (keyCode === 68){  //d
+        camera.pan.dx = 0
+    } else if (keyCode === 87){  //w
+        camera.pan.dy = 0;
+    } else if (keyCode === 83){  //s
+        camera.pan.dy = 0;
+    }
 
+}
+let fToggle = 0;
 function keyTyped() {
     if (key === 'f') {
-        if (camera.follow === game.baddies[0]){
+        fToggle = (fToggle + 1) % 3;
+        if (fToggle === 0){
             camera.follow = game.players['client'];
-        } else {
+        } else if (fToggle === 1){
             camera.follow = game.baddies[0];
+        } else {
+            camera.follow = game.origin;
         }
+        camera.resetPan();
     }
 }

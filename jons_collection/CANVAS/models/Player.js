@@ -25,8 +25,8 @@ Player.prototype.updatePos = function(){
 Player.prototype.draw = function(){
     stroke(0);
     fill(this.color);
-    let equationX = this.x + camera.view.x;
-    let equationY = this.y + camera.view.y;
+    let equationX = this.x - camera.view.x;
+    let equationY = this.y - camera.view.y;
     ellipse(equationX, equationY, this.size, this.size);
 
     let str;

@@ -23,6 +23,8 @@ function Robot(x, y, size, speed, color, game){
     }
     this.resetGrid();
     this.current = this.grid[x][y];
+    this.bufferTag = 0;
+    this.buffer = 5;
 
     // overridden by addPlayer fn in game class
     this.size = 20;
@@ -30,14 +32,15 @@ function Robot(x, y, size, speed, color, game){
 }
 Robot.prototype.updatePos = function(){
 
-    /*
-        gets next move based on
-        - what's possible
-        - what's been visited
-        - randomization
-    */
-    let next = this.getNextCell();
+    // some code to chill out the robots without
+    // having to slow frame rate
+    if (this.bufferTag != this.buffer){
+        this.bufferTag++;
+        return;
+    }
+    this.bufferTag = 0;
 
+    let next = this.getNextCell();
     if (next) {
         next.visited = true;
         this.stack.push(this.current);
@@ -66,18 +69,32 @@ Robot.prototype.draw = function(){
     let cell = grid[this.cellX][this.cellY];
     this.x = cell.middle.x;
     this.y = cell.middle.y;
-    let equationX = this.x + game.camera.view.x;
-    let equationY = this.y + game.camera.view.y;
+    let equationX = this.x - game.camera.view.x;
+    let equationY = this.y - game.camera.view.y;
     ellipse(equationX, equationY, this.size, this.size);
 };
 
 Robot.prototype.resetGrid = function(){
     let grid = this.grid;
+    this.stack = [];
     for (let row = 0; row < grid.length; row++){
         for (let col = 0; col < grid[row].length; col++){
             grid[row][col].visited = false;
         }
     }
+};
+
+Robot.prototype.resetMaze = function(){
+    this.grid = [];
+    for (let row = 0; row < game.maze.cells.length; row++){
+        let newRow = [];
+        for (let col = 0; col < game.maze.cells[0].length; col++){
+            let newCell = Cell.copy(game.maze.cells[row][col]);
+            newRow.push(newCell);
+        }
+        this.grid.push(newRow);
+    }
+    this.resetGrid();
 };
 
 

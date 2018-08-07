@@ -78,6 +78,42 @@ class Cell {
         newCell.walls = cell.walls.slice();
         return newCell;
     }
+
+    drawBorder(){
+        /*
+        // top
+        fill("#00a11c");
+        strokeWeight(0);
+
+        line(this.tl.x - game.camera.view.x,
+            this.tl.y - game.camera.view.y,
+            this.tr.x - game.camera.view.x,
+            this.tr.y - game.camera.view.y);
+
+        // right
+        line(this.tr.x - game.camera.view.x,
+            this.tr.y - game.camera.view.y,
+            this.br.x - game.camera.view.x,
+            this.br.y - game.camera.view.y);
+
+        // bottom
+        line(this.br.x - game.camera.view.x,
+            this.br.y -game.camera.view.y,
+            this.bl.x - game.camera.view.x,
+            this.bl.y - game.camera.view.y);
+
+        // left
+        line(this.bl.x - game.camera.view.x,
+            this.bl.y - game.camera.view.y,
+            this.tl.x - game.camera.view.x,
+            this.tl.y - game.camera.view.y);
+        strokeWeight(1);
+
+        */
+        fill("#00a11c");
+        rect(this.tl.x, this.tl.y, this.br.x, this.br.y);
+
+    }
 }
 
 class Maze {
@@ -104,6 +140,11 @@ class Maze {
         // build cells & add vertices
         game.cellWidth = game.width / horzCells;
         game.cellHeight = game.height / vertCells;
+        game.middle = {
+            'x': Math.floor(horzCells / 2),
+            'x': Math.floor(horzCells / 2),
+            'y': Math.floor(vertCells / 2)
+        };
         this.cells = [];
         for (let row = 0; row < horzCells; row++){
             let column = [];
@@ -124,6 +165,18 @@ class Maze {
             this.cells.push(column);
         }
 
+
+        this.addCellWalls();
+        this.setEdges();
+    }
+
+
+    /*
+        Recursive function that gives each cell a wall.
+        The culmination of all cells and their walls
+        makes a maze.
+     */
+    addCellWalls(){
         // set walls to cells to draw maze
         let stack = [];
         let current = this.cells[0][0];
@@ -132,11 +185,8 @@ class Maze {
             var next = this.checkNeighbors(current, this.cells);
             if (next) {
                 next.visited = true;
-                // STEP 2
                 stack.push(current);
-                // STEP 3
                 this.removeWalls(current, next);
-                // STEP 4
                 current = next;
             } else if (stack.length > 0) {
                 current = stack.pop();
@@ -144,10 +194,15 @@ class Maze {
                 current = null;
             }
         }
+    }
 
-        // convert cell walls to graph edges
-        for (let row = 0; row < horzCells; row++){
-            for (let col = 0; col < vertCells; col++){
+    /*
+        adds edges to the maze graph
+        based on all cell walls
+    */
+    setEdges(){
+        for (let row = 0; row < this.cells.length; row++){
+            for (let col = 0; col < this.cells[0].length; col++){
                 let curCell = this.cells[row][col];
 
                 if (curCell.walls[0]){
@@ -170,7 +225,7 @@ class Maze {
         let vertices = this.graph.AdjList.keys();
         for (let vert of vertices){
             stroke(255);
-            point(vert.x + game.camera.view.x, vert.y + game.camera.view.y);
+            point(vert.x - game.camera.view.x, vert.y - game.camera.view.y);
         }
     }
 
@@ -181,13 +236,13 @@ class Maze {
         for (let vert of vertices){
             let edges = this.graph.AdjList.get(vert);
             for (let edge of edges){
-                line(vert.x + game.camera.view.x,
-                     vert.y + game.camera.view.y,
-                     edge.x + game.camera.view.x,
-                     edge.y + game.camera.view.y);
+                line(vert.x - game.camera.view.x,
+                     vert.y - game.camera.view.y,
+                     edge.x - game.camera.view.x,
+                     edge.y - game.camera.view.y);
             }
 
-            //point(vert.x + game.camera.view.x, vert.y + game.camera.view.y);
+            //point(vert.x - game.camera.view.x, vert.y - game.camera.view.y);
         }
 
         /*
@@ -195,28 +250,28 @@ class Maze {
         */
 
         // top
-        line(0 + game.camera.view.x,
-             0 + game.camera.view.y,
-             game.width + game.camera.view.x,
-             0 + game.camera.view.y);
+        line(0 - game.camera.view.x,
+             0 - game.camera.view.y,
+             game.width - game.camera.view.x,
+             0 - game.camera.view.y);
 
         // right
-        line(game.width + game.camera.view.x,
-             0 + game.camera.view.y,
-             game.width + game.camera.view.x,
-             game.height + game.camera.view.y);
+        line(game.width - game.camera.view.x,
+             0 - game.camera.view.y,
+             game.width - game.camera.view.x,
+             game.height - game.camera.view.y);
 
         // bottom
-        line(game.width + game.camera.view.x,
-             game.height + game.camera.view.y,
-             0 + game.camera.view.x,
-             game.height + game.camera.view.y);
+        line(game.width - game.camera.view.x,
+             game.height -game.camera.view.y,
+             0 - game.camera.view.x,
+             game.height - game.camera.view.y);
 
         // left
-        line(0 + game.camera.view.x,
-             game.height + game.camera.view.y,
-             0 + game.camera.view.x,
-             0 + game.camera.view.y);
+        line(0 - game.camera.view.x,
+             game.height - game.camera.view.y,
+             0 - game.camera.view.x,
+             0 - game.camera.view.y);
 
     }
 
