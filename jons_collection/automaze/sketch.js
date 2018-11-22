@@ -3,8 +3,9 @@
 function setup() {
     game = new Game();
 
-	createCanvas(game.canvas.width, game.canvas.height);
-	loadImage("../assets/burried_modified.png", function(img){
+	//createCanvas(game.canvas.width, game.canvas.height);
+	createCanvas(windowWidth, windowHeight);
+    loadImage("../assets/grass.jpg", function(img){
         game.backgroundImage = img;
     });
 
@@ -23,8 +24,8 @@ function setup() {
     };
     let robot = new Robot(row, col, 20, 5, color, game);
     let robotTwo = new Robot(row, col, 20, 5, color, game);
-    //game.addRobot(robotTwo);
-    game.addRobot(robot);
+    game.addRobot(robotTwo);
+    //game.addRobot(robot);
 
     // set up coins to get
     let coin1 = new Coin(game.maze.cells.length - 1, 0, game);
@@ -33,8 +34,7 @@ function setup() {
     game.addCoin(coin2);
 
     game.camera.follow = game.origin;
-    frameRate(20);
-
+    frameRate(10);
 }
 
 function draw() {
@@ -51,10 +51,10 @@ function draw() {
                 game.coins.splice(c, 1);
                 break;
             }
-        };
+        }
 
         if (isSameCell(game.exit, game.players[p]) &&
-            game.coins.length == 0){
+            game.coins.length === 0){
             game.reset();
         }
     }
@@ -83,15 +83,11 @@ function draw() {
     }
 
     game.maze.cells[game.exit.cellX][game.exit.cellY].drawBorder();
-    //displayTime();
-
+    //game.displayTime();
 }
 
 function isSameCell(obj1, obj2){
-    if (obj1.cellX == obj2.cellX && obj1.cellY === obj2.cellY)
-        return true;
-    else
-        return false;
+    return (obj1.cellX === obj2.cellX && obj1.cellY === obj2.cellY);
 }
 
 
@@ -165,10 +161,13 @@ let fToggle = 0;
 function keyTyped() {
     if (key === 'f') {
         fToggle = (fToggle + 1) % 3;
+        console.log("fToggle: " + fToggle);
         if (fToggle === 0){
             game.camera.follow = game.players['client'];
+            console.log(game.camera.follow);
         } else if (fToggle === 1){
             game.camera.follow = game.baddies[0];
+            console.log(game.camera.follow);
         } else {
             game.camera.follow = game.origin;
         }

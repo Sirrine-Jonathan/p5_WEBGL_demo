@@ -7,14 +7,15 @@ class Game{
         //     width: 924,
         //     height: 476
         // };
-
-        this.width = 1024;
-        this.height = 576;
+        let screenWidth = screen.width;
+        let screenHeight = screenWidth * (9/16);
+        this.width = windowWidth;
+        this.height = windowHeight;
         this.canvas = {
-            width: 1024,
-            height: 576
+            width: windowWidth,
+            height: windowHeight
         };
-        this.mazeComplexity = 12;
+        this.mazeComplexity = 10;
         this.backgroundColor = "#000000";
         this.backgroundImage = null;
         this.players = {};
@@ -28,8 +29,8 @@ class Game{
 
         // these variables will be set by the maze constructor
         this.middle = {};
-        this.cellWidth;
-        this.cellHeight;
+        this.cellWidth = 10;
+        this.cellHeight = 10;
         this.maze = new Maze(this);
 
         this.time = 0;
@@ -61,7 +62,7 @@ class Game{
         this.coins.push(coin);
     }
 
-    displayWin(){
+    static displayWin(){
         textSize(100);
         fill("#00a11c");
         text("YOU WIN!!", game.canvas.width / 4, game.canvas.height / 4);
@@ -90,19 +91,22 @@ class Game{
         game.addCoin(coin1);
         game.addCoin(coin2);
 
-
-        if (this.wins % 2 == 0) {
-            let row = game.maze.cells.length - 1;
-            let col = game.maze.cells[0].length - 1;
+        let row = game.maze.cells.length - 1;
+        let col = game.maze.cells[0].length - 1;
+        if (this.wins % 2 === 0) {
             game.exit = {
                 'cellX': row,
                 'cellY': col
             };
+            game.players['client'].cellX = 0;
+            game.players['client'].cellY = 0;
         } else {
             game.exit = {
                 'cellX': 0,
                 'cellY': 0
             }
+            game.players['client'].cellX = row;
+            game.players['client'].cellY = col;
         }
     }
 }

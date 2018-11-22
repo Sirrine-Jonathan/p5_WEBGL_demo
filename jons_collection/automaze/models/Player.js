@@ -11,7 +11,8 @@ function Player(x, y, speed, color, game){
     this.y;
 
     // overridden by addPlayer fn in game class
-    this.size = 20;
+    this.size = 15;
+    this.image = loadImage("../assets/trump.png");  // Load the image
 }
 
 Player.prototype.updatePos = function(){
@@ -22,7 +23,7 @@ Player.prototype.updatePos = function(){
         return;
 
     let wallInd;
-    if (this.dx != 0){
+    if (this.dx !== 0){
         if (this.dx === 1){
             wallInd = 1;
         } else {
@@ -44,10 +45,19 @@ Player.prototype.updatePos = function(){
 
     this.cellX += this.dx;
     this.cellY += this.dy;
-
 };
 
 Player.prototype.draw = function(){
+    let grid = this.game.maze.cells;
+    let cell = grid[this.cellX][this.cellY];
+    image(
+        this.image,
+        cell.middle.x - (this.game.cellWidth / 2),
+        cell.middle.y - (this.game.cellHeight / 2),
+        this.game.cellWidth,
+        this.game.cellHeight
+    );
+    /*
     stroke(0);
     fill(this.color);
     let grid = this.game.maze.cells;
@@ -57,7 +67,7 @@ Player.prototype.draw = function(){
     let equationX = this.x - game.camera.view.x;
     let equationY = this.y - game.camera.view.y;
     ellipse(equationX, equationY, this.size, this.size);
-
+    */
     /*
         fill(255);
         let str;
@@ -77,7 +87,14 @@ Player.prototype.draw = function(){
 };
 
 Player.prototype.return = function(){
-    this.cellX = game.middle.x;
-    this.cellY = game.middle.y;
+    let mazeWidth = this.game.maze.cells.length;
+    let mazeHeight = this.game.maze.cells[0].length;
+    if (this.game.wins % 2 !== 0) {
+        this.cellX = mazeWidth - 1;
+        this.cellY = mazeHeight - 1;
+    } else {
+        this.cellX = 0;
+        this.cellY = 0;
+    }
 };
 

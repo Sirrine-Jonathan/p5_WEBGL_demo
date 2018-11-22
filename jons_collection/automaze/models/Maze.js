@@ -29,19 +29,19 @@ class Graph {
     printGraph()
     {
         // get all the vertices
-        var get_keys = this.AdjList.keys();
+        let get_keys = this.AdjList.keys();
 
         // iterate over the vertices
-        for (var i of get_keys)
+        for (let i of get_keys)
         {
             // great the corresponding adjacency list
             // for the vertex
-            var get_values = this.AdjList.get(i);
-            var conc = "";
+            let get_values = this.AdjList.get(i);
+            let conc = "";
 
             // iterate over the adjacency list
             // concatenate the values into a string
-            for (var j of get_values)
+            for (let j of get_values)
                 conc += j + " ";
 
             // print the vertex and its adjacency list
@@ -51,19 +51,22 @@ class Graph {
 }
 
 class Cell {
-    constructor(tl, tr, br, bl, row, col){
+    constructor(tl, tr, br, bl, row, col, cw, ch){
         this.row = row;
         this.col = col;
         this.tl = tl;
         this.tr = tr;
         this.br = br;
         this.bl = bl;
+        this.cw = cw;
+        this.ch = ch;
         this.middle = {
             'x': tl.x + ((tr.x - tl.x) / 2),
             'y': tl.y + ((bl.y - tl.y) / 2)
         };
         this.visited = false;
         this.walls = [true, true, true, true];
+        this.image = loadImage("../assets/whitehouse.png");
     }
 
     static copy(cell){
@@ -73,46 +76,26 @@ class Cell {
             cell.br,
             cell.bl,
             cell.row,
-            cell.col
+            cell.col,
+            cell.cw,
+            cell.ch
         );
         newCell.walls = cell.walls.slice();
         return newCell;
     }
 
     drawBorder(){
-        /*
-        // top
-        fill("#00a11c");
-        strokeWeight(0);
+        // TODO draw whitehouse.png
+        //fill("#a1010c");
+        //rect(this.tl.x, this.tl.y, this.br.x, this.br.y);
 
-        line(this.tl.x - game.camera.view.x,
-            this.tl.y - game.camera.view.y,
-            this.tr.x - game.camera.view.x,
-            this.tr.y - game.camera.view.y);
-
-        // right
-        line(this.tr.x - game.camera.view.x,
-            this.tr.y - game.camera.view.y,
-            this.br.x - game.camera.view.x,
-            this.br.y - game.camera.view.y);
-
-        // bottom
-        line(this.br.x - game.camera.view.x,
-            this.br.y -game.camera.view.y,
-            this.bl.x - game.camera.view.x,
-            this.bl.y - game.camera.view.y);
-
-        // left
-        line(this.bl.x - game.camera.view.x,
-            this.bl.y - game.camera.view.y,
-            this.tl.x - game.camera.view.x,
-            this.tl.y - game.camera.view.y);
-        strokeWeight(1);
-
-        */
-        fill("#00a11c");
-        rect(this.tl.x, this.tl.y, this.br.x, this.br.y);
-
+        image(
+            this.image,
+            this.tl.x,
+            this.tl.y,
+            this.cw,
+            this.ch
+        );
     }
 }
 
@@ -142,7 +125,6 @@ class Maze {
         game.cellHeight = game.height / vertCells;
         game.middle = {
             'x': Math.floor(horzCells / 2),
-            'x': Math.floor(horzCells / 2),
             'y': Math.floor(vertCells / 2)
         };
         this.cells = [];
@@ -155,7 +137,7 @@ class Maze {
                 let tr = {'x': row * cw + cw, 'y': col * ch};
                 let br = {'x': row * cw + cw, 'y': col * ch + ch};
                 let bl = {'x': row * cw, 'y': col * ch + ch};
-                let newCell = new Cell(tl, tr, br, bl, row, col);
+                let newCell = new Cell(tl, tr, br, bl, row, col, cw, ch);
                 this.graph.addVertex(newCell.tl);
                 this.graph.addVertex(newCell.tr);
                 this.graph.addVertex(newCell.br);
@@ -182,7 +164,7 @@ class Maze {
         let current = this.cells[0][0];
         current.visited = true;
         while (current != null) {
-            var next = this.checkNeighbors(current, this.cells);
+            let next = this.checkNeighbors(current, this.cells);
             if (next) {
                 next.visited = true;
                 stack.push(current);
@@ -221,18 +203,11 @@ class Maze {
         }
     }
 
-    drawVertices(){
-        let vertices = this.graph.AdjList.keys();
-        for (let vert of vertices){
-            stroke(255);
-            point(vert.x - game.camera.view.x, vert.y - game.camera.view.y);
-        }
-    }
-
     draw()
     {
         let vertices = this.graph.AdjList.keys();
         stroke(255);
+        strokeWeight(3);
         for (let vert of vertices){
             let edges = this.graph.AdjList.get(vert);
             for (let edge of edges){
